@@ -14,7 +14,8 @@
     "independent_citation_verification": "pass",
     "bounded_mutable_plan": "pass",
     "network_cancellation": "pass",
-    "phone_only_development_workflow": "pass"
+    "phone_only_development_workflow": "pass",
+    "qwen3_thinking_suppression": "pass"
   },
   "not_executed_in_generation_environment": [
     "Gradle compile: Gradle is not installed in this runtime",
@@ -33,6 +34,9 @@
     "termux_native_llama_build_script": "included",
     "github_actions_llama_debug_build": "included",
     "androidide_ndk_path": "not recommended",
-    "full_apk_build_executed_here": false
+    "full_apk_build_executed_here": false,
+    "termux_native_llama_target": "llama-simple-chat",
+    "termux_target_fix": "Pinned llama.cpp b10516 does not expose llama-cli as a Ninja target under the configured lightweight Termux build.",
+    "qwen3_native_inference_smoke": "user-confirmed: Qwen3-4B GGUF answered a basic prompt through llama-simple-chat"
   }
 }

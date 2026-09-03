@@ -19,6 +19,36 @@ class JsonExtractorTest {
     }
 
     @Test
+    fun ignoresThinkingBlockBeforeObject() {
+        val raw = """
+            <think>
+            I might emit {"wrong": true} while reasoning.
+            </think>
+            {"answer":"Paris","ok":true}
+        """.trimIndent()
+
+        assertEquals(
+            """{"answer":"Paris","ok":true}""",
+            JsonExtractor.objectText(raw),
+        )
+    }
+
+    @Test
+    fun stripsThinkingFromPlainOutput() {
+        val raw = """
+            <think>
+            private reasoning
+            </think>
+            The capital of France is Paris.
+        """.trimIndent()
+
+        assertEquals(
+            "The capital of France is Paris.",
+            ThinkingOutputSanitizer.strip(raw),
+        )
+    }
+
+    @Test
     fun extractsArray() {
         val raw = """prefix ["a", {"b":[1,2]}] suffix"""
         assertEquals(

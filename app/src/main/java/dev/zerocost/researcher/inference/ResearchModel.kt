@@ -44,12 +44,28 @@ interface ResearchModel {
     ): ModelBenchmark? = null
 }
 
+object ThinkingOutputSanitizer {
+    private val thinkBlock = Regex(
+        """<think(?:\s[^>]*)?>.*?</think\s*>""",
+        setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL),
+    )
+
+    fun strip(raw: String): String {
+        val cleaned = thinkBlock.replace(raw, "").trim()
+        return if (cleaned.startsWith("<think", ignoreCase = true)) {
+            ""
+        } else {
+            cleaned
+        }
+    }
+}
+
 object JsonExtractor {
     fun objectText(raw: String): String = balanced(raw, '{', '}')
     fun arrayText(raw: String): String = balanced(raw, '[', ']')
 
     private fun balanced(raw: String, open: Char, close: Char): String {
-        val cleaned = raw
+        val cleaned = ThinkingOutputSanitizer.strip(raw)
             .replace("```json", "")
             .replace("```", "")
             .trim()

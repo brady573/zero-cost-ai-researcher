@@ -34,7 +34,7 @@ if termux.is_file():
         'LLAMA_TAG="${LLAMA_TAG:-b10516}"',
         "pkg install -y git cmake ninja clang make python",
         "-DGGML_OPENMP=OFF",
-        "--target llama-cli",
+        "--target llama-simple-chat",
     ]:
         if needle not in text:
             problems.append(f"Termux llama build missing {needle}")

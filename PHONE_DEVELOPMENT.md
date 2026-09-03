@@ -96,18 +96,18 @@ bash scripts/termux-build-llama.sh
 ```
 
 That installs the required Termux packages, checks out pinned llama.cpp `b10516`, and builds
-`llama-cli` directly for the phone.
+`llama-simple-chat` directly for the phone.
 
 The result is:
 
 ```text
-third_party/llama.cpp/build-termux/bin/llama-cli
+third_party/llama.cpp/build-termux/bin/llama-simple-chat
 ```
 
-Test a GGUF model:
+Test a GGUF model, then type your prompt at the green `>` prompt:
 
 ```bash
-third_party/llama.cpp/build-termux/bin/llama-cli \
+third_party/llama.cpp/build-termux/bin/llama-simple-chat \
   -m ~/model.gguf \
   -c 4096 \
   -n 128 \

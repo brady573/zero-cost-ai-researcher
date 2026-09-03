@@ -27,7 +27,9 @@ class LlamaCppResearchModel(
         maxTokens: Int,
     ): String = mutex.withLock {
         ensureModelLoaded()
-        engine.setSystemPrompt(systemPrompt)
+        engine.setSystemPrompt(
+            "$systemPrompt\n\n/no_think"
+        )
 
         val startedAtEpochMs = System.currentTimeMillis()
         val startedElapsedMs = SystemClock.elapsedRealtime()
@@ -42,7 +44,7 @@ class LlamaCppResearchModel(
                 streamEmissions++
                 output.append(token)
             }
-            output.toString()
+            ThinkingOutputSanitizer.strip(output.toString())
         } finally {
             telemetry.record(
                 ModelCallMetric(

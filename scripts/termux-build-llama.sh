@@ -33,11 +33,11 @@ cmake \
   -DLLAMA_BUILD_TESTS=OFF \
   -DLLAMA_BUILD_SERVER=OFF
 
-cmake --build "$BUILD_DIR" --target llama-cli -j "$(nproc)"
+cmake --build "$BUILD_DIR" --target llama-simple-chat -j "$(nproc)"
 
 echo
 echo "llama.cpp CLI built successfully:"
-echo "$BUILD_DIR/bin/llama-cli"
+echo "$BUILD_DIR/bin/llama-simple-chat"
 echo
 echo "Example:"
-echo "$BUILD_DIR/bin/llama-cli -m ~/model.gguf -c 4096 -n 128 -p \"Say hello in one sentence.\""
+echo "$BUILD_DIR/bin/llama-simple-chat -m ~/model.gguf -c 4096"

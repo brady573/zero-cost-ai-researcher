@@ -21,14 +21,14 @@ import sys
 path = Path(sys.argv[1])
 text = path.read_text()
 pattern = re.compile(
-    r"(constexpr\\s+int\\s+DEFAULT_CONTEXT_SIZE\\s*=\\s*)8192(\\s*;)"
+    r"(constexpr\s+int\s+DEFAULT_CONTEXT_SIZE\s*=\s*)8192(\s*;)"
 )
-patched, count = pattern.subn(r"\\g<1>4096\\g<2>", text, count=1)
+patched, count = pattern.subn(r"\g<1>4096\g<2>", text, count=1)
 
 if count == 1:
     path.write_text(patched)
 elif not re.search(
-    r"constexpr\\s+int\\s+DEFAULT_CONTEXT_SIZE\\s*=\\s*4096\\s*;",
+    r"constexpr\s+int\s+DEFAULT_CONTEXT_SIZE\s*=\s*4096\s*;",
     text,
 ):
     raise SystemExit("Could not patch context size; upstream Android binding changed.")

@@ -1,19 +1,41 @@
 #!/usr/bin/env python3
-"""Regression check for the pinned llama.cpp Android context patch."""
+"""Execute the bootstrap context patch against pinned-upstream formatting."""
 
+from pathlib import Path
 import re
+import subprocess
 import sys
+import tempfile
 
-upstream = "constexpr int   DEFAULT_CONTEXT_SIZE    = 8192;"
-expected = "constexpr int   DEFAULT_CONTEXT_SIZE    = 4096;"
+root = Path(__file__).resolve().parents[1]
+bootstrap = (root / "scripts/bootstrap-llama.sh").read_text(encoding="utf-8")
 
-pattern = re.compile(
-    r"(constexpr\s+int\s+DEFAULT_CONTEXT_SIZE\s*=\s*)8192(\s*;)"
-)
-patched, count = pattern.subn(r"\g<1>4096\g<2>", upstream, count=1)
+marker = "python3 - \"$AI_CHAT\" <<'PY'\n"
+if marker not in bootstrap or "\nPY\n" not in bootstrap:
+    raise SystemExit("Could not locate bootstrap Python heredoc.")
 
-if count != 1 or patched != expected:
-    print("llama.cpp bootstrap patch regression check FAILED.")
-    sys.exit(1)
+body = bootstrap.split(marker, 1)[1].split("\nPY\n", 1)[0]
+upstream_line = "constexpr int   DEFAULT_CONTEXT_SIZE    = 8192;\n"
 
-print("llama.cpp bootstrap patch regression check passed.")
+with tempfile.TemporaryDirectory() as directory:
+    target = Path(directory) / "ai_chat.cpp"
+    target.write_text(upstream_line, encoding="utf-8")
+
+    completed = subprocess.run(
+        [sys.executable, "-", str(target)],
+        input=body,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    if completed.returncode != 0:
+        print(completed.stdout)
+        print(completed.stderr)
+        raise SystemExit("Bootstrap Python patch failed to execute.")
+
+    patched = target.read_text(encoding="utf-8")
+    if "DEFAULT_CONTEXT_SIZE    = 4096;" not in patched:
+        raise SystemExit(f"Unexpected patched content: {patched!r}")
+
+print("llama.cpp bootstrap patch execution check passed.")

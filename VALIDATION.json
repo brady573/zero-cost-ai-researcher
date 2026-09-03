@@ -17,7 +17,8 @@
     "phone_only_development_workflow": "pass",
     "qwen3_thinking_suppression": "pass",
     "phone_pre_push_guard": "pass",
-    "llama_bootstrap_whitespace_tolerant_patch": "pass"
+    "llama_bootstrap_whitespace_tolerant_patch": "pass",
+    "llama_bootstrap_regex_execution": "pass"
   },
   "not_executed_in_generation_environment": [
     "Gradle compile: Gradle is not installed in this runtime",
@@ -41,6 +42,7 @@
     "termux_target_fix": "Pinned llama.cpp b10516 does not expose llama-cli as a Ninja target under the configured lightweight Termux build.",
     "qwen3_native_inference_smoke": "user-confirmed: Qwen3-4B GGUF answered a basic prompt through llama-simple-chat",
     "git_safety": "GGUF/APK/env/keystore files and local llama.cpp checkout are ignored.",
-    "github_run_33782191315_failure": "fixed: bootstrap context-size patch now tolerates upstream C++ alignment whitespace"
+    "github_run_33782191315_failure": "fixed: bootstrap context-size patch now tolerates upstream C++ alignment whitespace",
+    "github_bootstrap_regex_fix": "fixed accidental double escaping in Python raw regex; exact heredoc logic now regression-tested"
   }
 }

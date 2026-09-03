@@ -3,7 +3,7 @@ package dev.zerocost.researcher.storage
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import java.io.DigestOutputStream
+import java.security.DigestOutputStream
 import java.io.File
 import java.security.MessageDigest
 

@@ -56,21 +56,29 @@ class AnswerSynthesizer(
         val labels = synthesisEvidence.mapIndexed { index, item ->
             "E${index + 1}" to item
         }
-        val context = labels.joinToString("\n\n") { (label, item) ->
+        val contextBuilder = StringBuilder()
+        for ((index, labeledEvidence) in labels.withIndex()) {
+            val (label, item) = labeledEvidence
             val source = repository.sourceById(item.sourceId)
-            """
-                [$label]
-                claim=${item.claimCandidate}
-                excerpt=${item.supportingExcerpt.take(LocalContextBudget.SYNTHESIS_EXCERPT_CHARS)}
-                source=${source?.title.orEmpty()}
-                url=${source?.canonicalUrl.orEmpty()}
-                publishedAtEpochMs=${source?.publishedAtEpochMs ?: "unknown"}
-                retrievedAtEpochMs=${source?.retrievedAtEpochMs ?: "unknown"}
-                sourceType=${item.sourceType}
-                authority=${item.authority}
-                relationship=${item.relationship}
-            """.trimIndent()
+            if (index > 0) {
+                contextBuilder.append("\n\n")
+            }
+            contextBuilder.append(
+                """
+                    [$label]
+                    claim=${item.claimCandidate}
+                    excerpt=${item.supportingExcerpt.take(LocalContextBudget.SYNTHESIS_EXCERPT_CHARS)}
+                    source=${source?.title.orEmpty()}
+                    url=${source?.canonicalUrl.orEmpty()}
+                    publishedAtEpochMs=${source?.publishedAtEpochMs ?: "unknown"}
+                    retrievedAtEpochMs=${source?.retrievedAtEpochMs ?: "unknown"}
+                    sourceType=${item.sourceType}
+                    authority=${item.authority}
+                    relationship=${item.relationship}
+                """.trimIndent()
+            )
         }
+        val context = contextBuilder.toString()
 
         val json = model.generateObject(
             systemPrompt = """

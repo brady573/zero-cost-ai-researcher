@@ -120,7 +120,9 @@ class SecurePageRetriever(
 
         builder.query(null)
         for (name in names.sorted()) {
-            parsed.queryParameterValues(name).sorted().forEach { value ->
+            val values = parsed.queryParameterValues(name)
+                .sortedWith(NULLABLE_STRING_COMPARATOR)
+            for (value in values) {
                 builder.addQueryParameter(name, value)
             }
         }
@@ -243,6 +245,16 @@ class SecurePageRetriever(
         const val FRESH_CACHE_AGE_MS = 6L * 60 * 60 * 1000
         const val DEFAULT_CACHE_AGE_MS = 7L * 24 * 60 * 60 * 1000
         const val ANY_CACHE_AGE_MS = Long.MAX_VALUE
+
+        private val NULLABLE_STRING_COMPARATOR =
+            Comparator<String?> { left, right ->
+                when {
+                    left == right -> 0
+                    left == null -> -1
+                    right == null -> 1
+                    else -> left.compareTo(right)
+                }
+            }
 
         private val ALLOWED_TYPES = listOf(
             "text/html",

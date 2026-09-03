@@ -35,32 +35,52 @@ class CitationVerifier(
 
         tracker.consumeModelCall()
 
-        val cases = segments.joinToString("\n\n---\n\n") { segment ->
+        val casesBuilder = StringBuilder()
+        for ((segmentIndex, segment) in segments.withIndex()) {
             val labels = extractLabels(segment.text)
-            val evidenceText = labels.joinToString("\n") { label ->
+            val evidenceTextBuilder = StringBuilder()
+
+            for (label in labels) {
+                if (evidenceTextBuilder.isNotEmpty()) {
+                    evidenceTextBuilder.append("\n")
+                }
+
                 val evidence = byLabel[label]
                 if (evidence == null) {
-                    "- [$label] missing from persisted evidence"
+                    evidenceTextBuilder.append(
+                        "- [$label] missing from persisted evidence"
+                    )
                 } else {
                     val source = repository.sourceById(evidence.sourceId)
-                    """
-                        - [$label]
-                          excerpt=${evidence.supportingExcerpt.take(LocalContextBudget.VERIFIER_EXCERPT_CHARS)}
-                          source=${source?.title.orEmpty()}
-                          url=${source?.canonicalUrl.orEmpty()}
-                          publishedAtEpochMs=${source?.publishedAtEpochMs ?: "unknown"}
-                          retrievedAtEpochMs=${source?.retrievedAtEpochMs ?: "unknown"}
-                    """.trimIndent()
+                    evidenceTextBuilder.append(
+                        """
+                            - [$label]
+                              excerpt=${evidence.supportingExcerpt.take(LocalContextBudget.VERIFIER_EXCERPT_CHARS)}
+                              source=${source?.title.orEmpty()}
+                              url=${source?.canonicalUrl.orEmpty()}
+                              publishedAtEpochMs=${source?.publishedAtEpochMs ?: "unknown"}
+                              retrievedAtEpochMs=${source?.retrievedAtEpochMs ?: "unknown"}
+                        """.trimIndent()
+                    )
                 }
-            }.ifBlank { "- no citation supplied" }
+            }
 
-            """
-                SEGMENT_ID: ${segment.id}
-                TEXT: ${segment.text}
-                CITED EVIDENCE:
-                $evidenceText
-            """.trimIndent()
+            val evidenceText = evidenceTextBuilder.toString()
+                .ifBlank { "- no citation supplied" }
+
+            if (segmentIndex > 0) {
+                casesBuilder.append("\n\n---\n\n")
+            }
+            casesBuilder.append(
+                """
+                    SEGMENT_ID: ${segment.id}
+                    TEXT: ${segment.text}
+                    CITED EVIDENCE:
+                    $evidenceText
+                """.trimIndent()
+            )
         }
+        val cases = casesBuilder.toString()
 
         val array = model.generateArray(
             systemPrompt = """

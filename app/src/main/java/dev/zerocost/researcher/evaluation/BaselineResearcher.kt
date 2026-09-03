@@ -15,7 +15,7 @@ class BaselineResearcher(
     private val passageSelector: PassageSelector,
     private val model: ResearchModel,
 ) {
-    suspend fun firstResult(question: BenchmarkQuestion): CandidateOutput {
+    internal suspend fun firstResult(question: BenchmarkQuestion): CandidateOutput {
         val batch = searchCoordinator.search(
             SearchRequest(query = question.question, maximumResults = 8)
         )
@@ -62,7 +62,7 @@ class BaselineResearcher(
         )
     }
 
-    suspend fun topN(question: BenchmarkQuestion, topN: Int): CandidateOutput {
+    internal suspend fun topN(question: BenchmarkQuestion, topN: Int): CandidateOutput {
         val batch = searchCoordinator.search(
             SearchRequest(query = question.question, maximumResults = 10)
         )

@@ -1,0 +1,38 @@
+{
+  "candidate": "0.2.0",
+  "status": "static-release-gate-pass",
+  "checks": {
+    "kotlin_delimiter_sanity": "pass",
+    "zero_cost_guardrails": "pass",
+    "m8_dataset_and_variants": "pass",
+    "m1_instrumentation": "pass",
+    "human_citation_audit": "pass",
+    "resume_cache_trace_resilience": "pass",
+    "4096_context_budget": "pass",
+    "source_snapshot_provenance": "pass",
+    "model_import_storage": "pass",
+    "independent_citation_verification": "pass",
+    "bounded_mutable_plan": "pass",
+    "network_cancellation": "pass",
+    "phone_only_development_workflow": "pass"
+  },
+  "not_executed_in_generation_environment": [
+    "Gradle compile: Gradle is not installed in this runtime",
+    "Android lint",
+    "JVM unit tests through Gradle",
+    "Android instrumentation tests",
+    "llama.cpp NDK compilation",
+    "Galaxy S25+ GGUF load/generation",
+    "1-minute and 10-minute M1 device runs",
+    "live Tavily/SearXNG smoke tests",
+    "M8 live benchmark",
+    "human citation audit on live M8 output"
+  ],
+  "next_blocker": "Push the project to GitHub from the phone and run the included Android APK workflow, or test the native llama.cpp CLI in Termux.",
+  "phone_development": {
+    "termux_native_llama_build_script": "included",
+    "github_actions_llama_debug_build": "included",
+    "androidide_ndk_path": "not recommended",
+    "full_apk_build_executed_here": false
+  }
+}

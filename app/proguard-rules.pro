@@ -1,0 +1,1 @@
+-keep class dev.zerocost.researcher.data.** { *; }

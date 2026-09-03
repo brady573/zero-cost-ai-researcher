@@ -1,0 +1,109 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  llama-debug:
+    name: llamaDebug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      ANDROID_NDK_VERSION: "29.0.13113456"
+      ANDROID_CMAKE_VERSION: "3.31.6"
+      ANDROID_PLATFORM: "36"
+      ANDROID_BUILD_TOOLS: "35.0.0"
+      GRADLE_VERSION: "8.13"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK, NDK, and CMake
+        shell: bash
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager \
+            "platforms;android-${ANDROID_PLATFORM}" \
+            "build-tools;${ANDROID_BUILD_TOOLS}" \
+            "ndk;${ANDROID_NDK_VERSION}" \
+            "cmake;${ANDROID_CMAKE_VERSION}"
+
+      - name: Install Gradle 8.13
+        shell: bash
+        run: |
+          curl -fsSL \
+            "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
+            -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d "$HOME"
+          echo "$HOME/gradle-${GRADLE_VERSION}/bin" >> "$GITHUB_PATH"
+
+      - name: Bootstrap pinned llama.cpp
+        shell: bash
+        run: |
+          chmod +x scripts/bootstrap-llama.sh
+          ./scripts/bootstrap-llama.sh
+
+      - name: Run static release checks
+        shell: bash
+        run: |
+          python3 scripts/check-zero-cost.py
+          python3 scripts/check-m8.py
+          python3 scripts/check-m1.py
+          python3 scripts/check-citation-audit.py
+          python3 scripts/check-resilience.py
+          python3 scripts/check-context-budget.py
+          python3 scripts/check-source-provenance.py
+          python3 scripts/check-model-storage.py
+          python3 scripts/check-independent-verification.py
+          python3 scripts/check-mutable-plan.py
+          python3 scripts/check-network-cancellation.py
+
+      - name: Build llamaDebug APK
+        shell: bash
+        run: |
+          gradle :app:assembleLlamaDebug \
+            --no-daemon \
+            --stacktrace
+
+      - name: Run JVM unit tests
+        shell: bash
+        run: |
+          gradle :app:testLlamaDebugUnitTest \
+            --no-daemon \
+            --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: zero-cost-ai-researcher-llama-debug
+          path: app/build/outputs/apk/llama/debug/*.apk
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload test reports on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-diagnostics
+          path: |
+            app/build/reports/**
+            app/build/test-results/**
+          if-no-files-found: ignore
+          retention-days: 7

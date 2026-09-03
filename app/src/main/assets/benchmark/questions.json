@@ -1,0 +1,847 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "factual-01",
+      "category": "FACTUAL",
+      "question": "What percentage of Earth's dry atmosphere is nitrogen by volume?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "numerical percentage",
+        "dry-air basis",
+        "authoritative scientific source"
+      ]
+    },
+    {
+      "id": "factual-02",
+      "category": "FACTUAL",
+      "question": "What is the Unicode code point for the euro sign, and how is it encoded in UTF-8?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "Unicode code point",
+        "UTF-8 byte sequence",
+        "Unicode-standard source"
+      ]
+    },
+    {
+      "id": "factual-03",
+      "category": "FACTUAL",
+      "question": "What is the defined value of the speed of light in vacuum in SI units?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "exact SI value",
+        "units",
+        "standards authority"
+      ]
+    },
+    {
+      "id": "factual-04",
+      "category": "FACTUAL",
+      "question": "When was Voyager 1 launched, and from which launch site?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "launch date",
+        "launch site",
+        "primary mission source"
+      ]
+    },
+    {
+      "id": "factual-05",
+      "category": "FACTUAL",
+      "question": "What does HTTP status code 429 mean and which response header is commonly used to indicate retry timing?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "429 meaning",
+        "Retry-After behavior",
+        "HTTP specification"
+      ]
+    },
+    {
+      "id": "factual-06",
+      "category": "FACTUAL",
+      "question": "What is the nominal voltage and frequency of household mains electricity in the United States?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "nominal voltage",
+        "frequency",
+        "scope/qualification"
+      ]
+    },
+    {
+      "id": "factual-07",
+      "category": "FACTUAL",
+      "question": "What is the maximum theoretical payload size of a standard Ethernet frame without jumbo frames?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "payload bytes",
+        "frame terminology",
+        "standard Ethernet qualification"
+      ]
+    },
+    {
+      "id": "factual-08",
+      "category": "FACTUAL",
+      "question": "What license is the Linux kernel distributed under, and what does the kernel project's COPYING file say about the version?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "license family",
+        "version wording",
+        "primary project source"
+      ]
+    },
+    {
+      "id": "recent-01",
+      "category": "RECENT",
+      "question": "What is the current stable PostgreSQL major version, its latest minor release, and the release date?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "current major",
+        "latest minor",
+        "release date",
+        "official release source"
+      ]
+    },
+    {
+      "id": "recent-02",
+      "category": "RECENT",
+      "question": "What is the current stable Android version and API level available to developers?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "Android version",
+        "API level",
+        "official Android documentation",
+        "current date"
+      ]
+    },
+    {
+      "id": "recent-03",
+      "category": "RECENT",
+      "question": "What is the current Python stable feature release, and which Python branches currently receive security fixes?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "stable feature release",
+        "security-supported branches",
+        "official lifecycle source"
+      ]
+    },
+    {
+      "id": "recent-04",
+      "category": "RECENT",
+      "question": "What is the current Node.js LTS release line and when does it leave maintenance?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "LTS line",
+        "maintenance end date",
+        "official release schedule"
+      ]
+    },
+    {
+      "id": "recent-05",
+      "category": "RECENT",
+      "question": "What is the current Firefox ESR release line and its published support transition schedule?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "ESR line",
+        "transition/support schedule",
+        "Mozilla source"
+      ]
+    },
+    {
+      "id": "recent-06",
+      "category": "RECENT",
+      "question": "What Android NDK version does the current official llama.cpp Android example require or pin?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "NDK version",
+        "llama.cpp Android example",
+        "current repository evidence"
+      ]
+    },
+    {
+      "id": "recent-07",
+      "category": "RECENT",
+      "question": "What is the current stable Kotlin release and what Kotlin version does the latest stable Android Compose toolchain support?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "Kotlin stable version",
+        "Compose/Android compatibility",
+        "official sources",
+        "date"
+      ]
+    },
+    {
+      "id": "recent-08",
+      "category": "RECENT",
+      "question": "What is the current free Tavily allowance for a no-credit-card developer account, and how are basic search calls charged against it?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "free allowance",
+        "credit-card requirement",
+        "basic-search credit cost",
+        "current pricing/docs"
+      ]
+    },
+    {
+      "id": "comparison-01",
+      "category": "COMPARISON",
+      "question": "Are heat pumps cheaper than gas heating over ten years for a typical cold-climate home?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "installation cost",
+        "operating cost",
+        "maintenance",
+        "energy prices",
+        "incentives",
+        "climate/geography"
+      ]
+    },
+    {
+      "id": "comparison-02",
+      "category": "COMPARISON",
+      "question": "Compare PostgreSQL logical replication with physical streaming replication for high-availability and selective data replication.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "replication granularity",
+        "HA/failover",
+        "DDL/schema behavior",
+        "operational tradeoffs",
+        "official docs"
+      ]
+    },
+    {
+      "id": "comparison-03",
+      "category": "COMPARISON",
+      "question": "Compare SQLite WAL mode with rollback-journal mode for a mobile app with concurrent reads and occasional writes.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "read/write concurrency",
+        "checkpointing",
+        "storage behavior",
+        "failure/recovery",
+        "mobile implications"
+      ]
+    },
+    {
+      "id": "comparison-04",
+      "category": "COMPARISON",
+      "question": "Compare ext4 and F2FS for flash-heavy Android workloads.",
+      "requiresFreshness": false,
+      "expectedConflict": true,
+      "facets": [
+        "flash characteristics",
+        "write amplification",
+        "performance",
+        "maturity/reliability",
+        "workload dependence"
+      ]
+    },
+    {
+      "id": "comparison-05",
+      "category": "COMPARISON",
+      "question": "Compare Q4_K_M and Q5_K_M GGUF quantization for a 4B model on a phone.",
+      "requiresFreshness": false,
+      "expectedConflict": true,
+      "facets": [
+        "model size",
+        "memory",
+        "speed",
+        "quality",
+        "device-specific tradeoff"
+      ]
+    },
+    {
+      "id": "comparison-06",
+      "category": "COMPARISON",
+      "question": "Compare a public SearXNG instance with Tavily's free API for a zero-cost autonomous research app.",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "availability/reliability",
+        "structured API",
+        "rate/free limits",
+        "privacy",
+        "automation suitability"
+      ]
+    },
+    {
+      "id": "comparison-07",
+      "category": "COMPARISON",
+      "question": "Compare Jetpack Compose with XML Views for a new small Android application in terms of development and runtime tradeoffs.",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "developer productivity",
+        "interoperability",
+        "runtime/performance",
+        "tooling",
+        "maintenance"
+      ]
+    },
+    {
+      "id": "comparison-08",
+      "category": "COMPARISON",
+      "question": "Compare Kotlin Flow and Channels for representing a stream of UI state updates.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "hot/cold semantics",
+        "backpressure/buffering",
+        "state modeling",
+        "lifecycle/UI fit"
+      ]
+    },
+    {
+      "id": "technical-01",
+      "category": "TECHNICAL",
+      "question": "How can DNS rebinding defeat a naive SSRF defense that validates a hostname before connecting, and how should an HTTP client mitigate it?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "DNS rebinding mechanism",
+        "validation/connect race",
+        "resolver enforcement",
+        "redirect revalidation"
+      ]
+    },
+    {
+      "id": "technical-02",
+      "category": "TECHNICAL",
+      "question": "Why can a large llama.cpp context size substantially increase memory usage on a mobile device?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "KV cache",
+        "context length relationship",
+        "model/runtime memory",
+        "mobile constraint"
+      ]
+    },
+    {
+      "id": "technical-03",
+      "category": "TECHNICAL",
+      "question": "How does SQLite WAL checkpoint starvation happen and what operational symptoms can it cause?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "long-lived readers",
+        "checkpoint progress",
+        "WAL growth",
+        "mitigation"
+      ]
+    },
+    {
+      "id": "technical-04",
+      "category": "TECHNICAL",
+      "question": "What information does the GGUF format store that a llama.cpp loader needs before inference?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "tensor metadata",
+        "model metadata",
+        "tokenizer/config information",
+        "llama.cpp/GGUF source"
+      ]
+    },
+    {
+      "id": "technical-05",
+      "category": "TECHNICAL",
+      "question": "How should an application canonicalize URLs for caching without incorrectly merging semantically different resources?",
+      "requiresFreshness": false,
+      "expectedConflict": true,
+      "facets": [
+        "fragment handling",
+        "tracking parameters",
+        "query semantics/order",
+        "redirect/canonical caveats"
+      ]
+    },
+    {
+      "id": "technical-06",
+      "category": "TECHNICAL",
+      "question": "What failure modes make structured JSON generation unreliable with a small local LLM, and what validation/retry strategy is appropriate?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "syntax failure",
+        "schema failure",
+        "prompt/grammar constraints",
+        "parser validation",
+        "bounded retry"
+      ]
+    },
+    {
+      "id": "technical-07",
+      "category": "TECHNICAL",
+      "question": "Why is content-hash deduplication alone insufficient for detecting syndicated or derivative web sources?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "identical vs rewritten content",
+        "publisher/source lineage",
+        "similarity",
+        "independence scoring"
+      ]
+    },
+    {
+      "id": "technical-08",
+      "category": "TECHNICAL",
+      "question": "How should an Android HTTP retriever limit and validate response bodies when Content-Length is missing or untrusted?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "streaming byte cap",
+        "Content-Length caveat",
+        "content type",
+        "timeouts/error handling"
+      ]
+    },
+    {
+      "id": "obscure-01",
+      "category": "OBSCURE",
+      "question": "How does the PNG Paeth filter choose its predictor, and why can that improve compression?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "Paeth predictor inputs",
+        "selection rule",
+        "pre-compression purpose",
+        "PNG specification"
+      ]
+    },
+    {
+      "id": "obscure-02",
+      "category": "OBSCURE",
+      "question": "What is PostgreSQL's visibility map and how does it enable index-only scans?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "all-visible bit",
+        "heap visibility",
+        "index-only scan condition",
+        "VACUUM relationship"
+      ]
+    },
+    {
+      "id": "obscure-03",
+      "category": "OBSCURE",
+      "question": "What problem does QPACK solve in HTTP/3 compared with HPACK over HTTP/2?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "QUIC stream independence",
+        "header compression",
+        "head-of-line blocking",
+        "QPACK design"
+      ]
+    },
+    {
+      "id": "obscure-04",
+      "category": "OBSCURE",
+      "question": "What is Linux memfd_create used for, and how is it different from creating a normal temporary file?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "anonymous memory-backed file",
+        "file descriptor semantics",
+        "filesystem visibility",
+        "sealing"
+      ]
+    },
+    {
+      "id": "obscure-05",
+      "category": "OBSCURE",
+      "question": "What is HTTP Alt-Svc and how can a client use it without changing the origin seen by the application?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "alternative service advertisement",
+        "origin authority",
+        "connection routing",
+        "security constraints"
+      ]
+    },
+    {
+      "id": "obscure-06",
+      "category": "OBSCURE",
+      "question": "Why does TLS GREASE intentionally send unknown values during negotiation?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "protocol ossification",
+        "unknown-value tolerance",
+        "GREASE mechanism",
+        "standards source"
+      ]
+    },
+    {
+      "id": "obscure-07",
+      "category": "OBSCURE",
+      "question": "What replaced Android ashmem for many modern Android use cases, and why?",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "ashmem history",
+        "memfd",
+        "kernel/upstream rationale",
+        "Android version context"
+      ]
+    },
+    {
+      "id": "obscure-08",
+      "category": "OBSCURE",
+      "question": "What is the purpose of SQLite's sqlite_stat4 table when ANALYZE is built with STAT4 support?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "histogram/sample statistics",
+        "query planner selectivity",
+        "compile-time option",
+        "ANALYZE"
+      ]
+    },
+    {
+      "id": "multi-01",
+      "category": "MULTI_STEP",
+      "question": "Estimate whether a roughly 2.5 GB Q4_K_M 4B model with a 4096-token context is likely to fit comfortably on a Galaxy S25+ while leaving headroom for an Android research app.",
+      "requiresFreshness": true,
+      "expectedConflict": false,
+      "facets": [
+        "device RAM",
+        "model mapping",
+        "KV/cache memory",
+        "runtime overhead",
+        "thermal/headroom uncertainty"
+      ]
+    },
+    {
+      "id": "multi-02",
+      "category": "MULTI_STEP",
+      "question": "If a user performs three Normal research runs per day, estimate the worst-case monthly Tavily basic-search credits under this app's Normal search budget.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "Normal max searches",
+        "runs/day",
+        "days/month assumption",
+        "credit arithmetic",
+        "local/provider cap implication"
+      ]
+    },
+    {
+      "id": "multi-03",
+      "category": "MULTI_STEP",
+      "question": "Design a cache-freshness policy for this app that treats current software release pages differently from evergreen technical standards.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "content classes",
+        "TTL strategy",
+        "revalidation",
+        "staleness risk",
+        "offline/cache benefit"
+      ]
+    },
+    {
+      "id": "multi-04",
+      "category": "MULTI_STEP",
+      "question": "Given three articles that all quote the same vendor press release, determine how many independent confirmations should count toward corroboration and explain why.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "source lineage",
+        "syndication",
+        "independence",
+        "corroboration effect"
+      ]
+    },
+    {
+      "id": "multi-05",
+      "category": "MULTI_STEP",
+      "question": "For a question with two high-authority sources that report different numerical values from different years, outline the research steps needed before choosing either value.",
+      "requiresFreshness": false,
+      "expectedConflict": true,
+      "facets": [
+        "date alignment",
+        "definition/method",
+        "follow-up search",
+        "uncertainty handling",
+        "no blind averaging"
+      ]
+    },
+    {
+      "id": "multi-06",
+      "category": "MULTI_STEP",
+      "question": "Estimate private cache growth after 100 research runs if each run stores 15 unique cleaned pages averaging 180 KB of HTML plus 40 KB of text, assuming no cross-run duplicates.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "page count",
+        "per-page storage",
+        "total storage arithmetic",
+        "dedup caveat"
+      ]
+    },
+    {
+      "id": "multi-07",
+      "category": "MULTI_STEP",
+      "question": "Choose between Normal, Deep, and Very Deep mode for a time-sensitive comparison with conflicting sources, and justify the choice using the configured budgets.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "mode budgets",
+        "freshness",
+        "conflict investigation",
+        "latency/resource tradeoff"
+      ]
+    },
+    {
+      "id": "multi-08",
+      "category": "MULTI_STEP",
+      "question": "A search result redirects through two hosts before reaching a final article. Describe every security validation point the retriever should perform before accepting the content.",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "initial URL validation",
+        "each redirect validation",
+        "DNS/IP validation at connection",
+        "scheme/content/size checks"
+      ]
+    },
+    {
+      "id": "conflict-01",
+      "category": "CONFLICTING",
+      "question": "Do electric vehicles have lower lifecycle greenhouse-gas emissions than comparable gasoline cars?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "manufacturing emissions",
+        "electricity mix",
+        "vehicle lifetime",
+        "battery production",
+        "geography"
+      ]
+    },
+    {
+      "id": "conflict-02",
+      "category": "CONFLICTING",
+      "question": "Does remote work increase or decrease employee productivity?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "job type",
+        "measurement method",
+        "hybrid vs fully remote",
+        "time period",
+        "selection effects"
+      ]
+    },
+    {
+      "id": "conflict-03",
+      "category": "CONFLICTING",
+      "question": "Is nuclear power cost-competitive with new wind and solar generation when system costs are considered?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "capital cost",
+        "capacity factor",
+        "financing",
+        "system/integration costs",
+        "regional assumptions"
+      ]
+    },
+    {
+      "id": "conflict-04",
+      "category": "CONFLICTING",
+      "question": "Do microservices generally improve scalability enough to justify their operational complexity for small engineering teams?",
+      "requiresFreshness": false,
+      "expectedConflict": true,
+      "facets": [
+        "team/product scale",
+        "independent scaling",
+        "operational overhead",
+        "deployment/failure complexity"
+      ]
+    },
+    {
+      "id": "conflict-05",
+      "category": "CONFLICTING",
+      "question": "Does blue light from screens materially worsen sleep compared with other effects of nighttime device use?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "light wavelength/intensity",
+        "screen timing",
+        "behavioral stimulation",
+        "study design",
+        "magnitude"
+      ]
+    },
+    {
+      "id": "conflict-06",
+      "category": "CONFLICTING",
+      "question": "Are heat pumps effective and economical in very cold climates?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "cold-temperature performance",
+        "backup heat",
+        "electricity/fuel prices",
+        "building envelope",
+        "modern cold-climate units"
+      ]
+    },
+    {
+      "id": "conflict-07",
+      "category": "CONFLICTING",
+      "question": "Do AI coding assistants measurably improve developer productivity on real software-engineering tasks?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "task type",
+        "experience level",
+        "study design",
+        "quality/rework",
+        "time measurement"
+      ]
+    },
+    {
+      "id": "conflict-08",
+      "category": "CONFLICTING",
+      "question": "Is F2FS consistently faster than ext4 on modern flash storage?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "workload",
+        "device/storage type",
+        "kernel/version",
+        "latency vs throughput",
+        "reliability tradeoff"
+      ]
+    },
+    {
+      "id": "weak-01",
+      "category": "WEAK_SOURCE",
+      "question": "Does putting a wet phone in uncooked rice help it dry safely?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "manufacturer guidance",
+        "corrosion/particle risk",
+        "effective drying approach",
+        "avoid anecdotal sources"
+      ]
+    },
+    {
+      "id": "weak-02",
+      "category": "WEAK_SOURCE",
+      "question": "Does routinely force-closing Android background apps improve battery life?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "Android lifecycle/process management",
+        "restart cost",
+        "official platform guidance",
+        "exceptions"
+      ]
+    },
+    {
+      "id": "weak-03",
+      "category": "WEAK_SOURCE",
+      "question": "Does private/incognito browsing make a user anonymous on the internet?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "local history/cookies",
+        "ISP/network visibility",
+        "websites/account identity",
+        "browser documentation"
+      ]
+    },
+    {
+      "id": "weak-04",
+      "category": "WEAK_SOURCE",
+      "question": "Can an ordinary household magnet erase data from an SSD?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "flash storage mechanism",
+        "magnetic-field relevance",
+        "controller/data failure distinction",
+        "credible technical source"
+      ]
+    },
+    {
+      "id": "weak-05",
+      "category": "WEAK_SOURCE",
+      "question": "Does leaving a modern smartphone plugged in overnight necessarily damage its battery?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "charge management",
+        "heat",
+        "battery aging",
+        "manufacturer guidance",
+        "qualification"
+      ]
+    },
+    {
+      "id": "weak-06",
+      "category": "WEAK_SOURCE",
+      "question": "Does adding more RAM always make an Android phone faster?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "memory pressure",
+        "workload",
+        "storage/CPU bottlenecks",
+        "diminishing returns"
+      ]
+    },
+    {
+      "id": "weak-07",
+      "category": "WEAK_SOURCE",
+      "question": "Does 5G always consume more phone battery than Wi-Fi?",
+      "requiresFreshness": true,
+      "expectedConflict": true,
+      "facets": [
+        "radio conditions",
+        "signal strength",
+        "traffic pattern",
+        "modem/network generation",
+        "measurement context"
+      ]
+    },
+    {
+      "id": "weak-08",
+      "category": "WEAK_SOURCE",
+      "question": "Do expensive gold-plated HDMI cables produce better digital picture quality than compliant inexpensive cables?",
+      "requiresFreshness": false,
+      "expectedConflict": false,
+      "facets": [
+        "digital link behavior",
+        "spec compliance",
+        "signal integrity/failure modes",
+        "marketing claims vs standards"
+      ]
+    }
+  ]
+}

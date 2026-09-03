@@ -8,3 +8,8 @@ captures/
 third_party/llama.cpp/
 *.iml
 .DS_Store
+*.gguf
+*.apk
+.env
+*.keystore
+*.jks

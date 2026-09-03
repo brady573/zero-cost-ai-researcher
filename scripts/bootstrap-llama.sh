@@ -15,18 +15,26 @@ fi
 AI_CHAT="$TARGET/examples/llama.android/lib/src/main/cpp/ai_chat.cpp"
 python3 - "$AI_CHAT" <<'PY'
 from pathlib import Path
+import re
 import sys
 
 path = Path(sys.argv[1])
 text = path.read_text()
-old = "constexpr int DEFAULT_CONTEXT_SIZE = 8192;"
-new = "constexpr int DEFAULT_CONTEXT_SIZE = 4096;"
-if old in text:
-    path.write_text(text.replace(old, new, 1))
-elif new not in text:
+pattern = re.compile(
+    r"(constexpr\\s+int\\s+DEFAULT_CONTEXT_SIZE\\s*=\\s*)8192(\\s*;)"
+)
+patched, count = pattern.subn(r"\\g<1>4096\\g<2>", text, count=1)
+
+if count == 1:
+    path.write_text(patched)
+elif not re.search(
+    r"constexpr\\s+int\\s+DEFAULT_CONTEXT_SIZE\\s*=\\s*4096\\s*;",
+    text,
+):
     raise SystemExit("Could not patch context size; upstream Android binding changed.")
+
 print("llama.cpp Android context size set to 4096.")
 PY
 
 echo "Bootstrap complete."
-echo "Build real inference flavor with: ./gradlew :app:assembleLlamaDebug"
+echo "llama.cpp Android binding is ready for the llamaDebug Gradle build."

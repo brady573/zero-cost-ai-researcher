@@ -74,6 +74,9 @@ jobs:
           python3 scripts/check-independent-verification.py
           python3 scripts/check-mutable-plan.py
           python3 scripts/check-network-cancellation.py
+          python3 scripts/check-thinking-suppression.py
+          python3 scripts/check-phone-development.py
+          python3 scripts/check-bootstrap-llama-patch.py
 
       - name: Build llamaDebug APK
         shell: bash

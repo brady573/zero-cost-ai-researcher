@@ -63,7 +63,7 @@ class LlamaCppResearchModel(
         parallelSequences: Int,
         repetitions: Int,
     ): ModelBenchmark = mutex.withLock {
-        ensureModelLoaded()
+        ensureModelLoaded(null)
         val raw = engine.bench(
             pp = promptTokens,
             tg = generationTokens,
@@ -117,10 +117,10 @@ class LlamaCppResearchModel(
                     loadedPath = path
                     currentSystemPrompt = systemPrompt
                     engine.setSystemPrompt("$systemPrompt\n\n/no_think")
-                } catch {
+                } catch (e: Throwable) {
                     currentSystemPrompt = null
                     loadedPath = null
-                    throw
+                    throw e
                 }
             }
             loadedPath != path -> {

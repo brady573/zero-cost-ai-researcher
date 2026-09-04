@@ -1,6 +1,7 @@
 package dev.zerocost.researcher.performance
 
 import android.content.Context
+import dev.zerocost.researcher.inference.JsonExtractor
 import dev.zerocost.researcher.inference.ModelBenchmark
 import dev.zerocost.researcher.inference.ModelNotReadyException
 import dev.zerocost.researcher.inference.ResearchModel
@@ -83,17 +84,24 @@ class M1ValidationRunner(
                 val workload = WORKLOADS[attempts % WORKLOADS.size]
                 attempts++
 
-                val succeeded = try {
-                    val result = model.generateObject(
+                val raw = try {
+                    model.generateText(
                         systemPrompt = STRUCTURED_SYSTEM,
                         prompt = workload,
                         maxTokens = 220,
                     )
-                    validateWorkloadResult(result)
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (notReady: ModelNotReadyException) {
                     throw notReady
+                } catch (error: Exception) {
+                    throw runtimeFailure("M1 inference", error)
+                }
+
+                val succeeded = try {
+                    validateWorkloadResult(
+                        JSONObject(JsonExtractor.objectText(raw))
+                    )
                 } catch (_: Exception) {
                     false
                 }
@@ -108,14 +116,20 @@ class M1ValidationRunner(
                         "$successes/$attempts"
                 )
             }
-            nativeBenchmark = runCatching {
+            nativeBenchmark = try {
                 model.benchmark(
                     promptTokens = 128,
                     generationTokens = 128,
                     parallelSequences = 1,
                     repetitions = 3,
                 )
-            }.getOrNull()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (notReady: ModelNotReadyException) {
+                throw notReady
+            } catch (error: Exception) {
+                throw runtimeFailure("M1 benchmark", error)
+            }
             completedNormally = true
         } catch (cancelled: CancellationException) {
             cancellation = cancelled
@@ -143,6 +157,22 @@ class M1ValidationRunner(
 
         cancellation?.let { throw it }
         return result
+    }
+
+    private fun runtimeFailure(
+        stage: String,
+        error: Exception,
+    ): IllegalStateException {
+        val type = error::class.java.simpleName.ifBlank {
+            error::class.java.name
+        }
+        val detail = error.message
+            ?.takeIf { it.isNotBlank() }
+            ?: "no message"
+        return IllegalStateException(
+            "$stage failed: $type: $detail",
+            error,
+        )
     }
 
     private fun buildResult(

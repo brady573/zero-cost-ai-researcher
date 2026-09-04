@@ -20,16 +20,14 @@ class LlamaCppResearchModel(
     private val engine: InferenceEngine = AiChat.getInferenceEngine(context)
     private val mutex = Mutex()
     private var loadedPath: String? = null
+    private var currentSystemPrompt: String? = null
 
     override suspend fun generateText(
         systemPrompt: String,
         prompt: String,
         maxTokens: Int,
     ): String = mutex.withLock {
-        ensureModelLoaded()
-        engine.setSystemPrompt(
-            "$systemPrompt\n\n/no_think"
-        )
+        ensureModelLoaded(systemPrompt)
 
         val startedAtEpochMs = System.currentTimeMillis()
         val startedElapsedMs = SystemClock.elapsedRealtime()
@@ -98,19 +96,41 @@ class LlamaCppResearchModel(
         }
     }
 
-    private suspend fun ensureModelLoaded() {
+    private suspend fun ensureModelLoaded(systemPrompt: String?) {
         val path = preferences.modelPath
         if (path.isBlank() || !File(path).isFile) {
             throw ModelNotReadyException(
                 "Import a GGUF model before researching."
             )
         }
-        if (loadedPath == path) return
 
-        if (loadedPath != null) {
-            engine.cleanUp()
+        when {
+            systemPrompt != null -> {
+                // New logic: manage system prompt lifecycle
+                if (loadedPath == path && currentSystemPrompt == systemPrompt) return
+
+                if (loadedPath != null) {
+                    engine.cleanUp()
+                }
+                try {
+                    engine.loadModel(path)
+                    loadedPath = path
+                    currentSystemPrompt = systemPrompt
+                    engine.setSystemPrompt("$systemPrompt\n\n/no_think")
+                } catch {
+                    currentSystemPrompt = null
+                    loadedPath = null
+                    throw
+                }
+            }
+            loadedPath != path -> {
+                // Old logic: used by benchmark(), no system prompt management
+                if (loadedPath != null) {
+                    engine.cleanUp()
+                }
+                engine.loadModel(path)
+                loadedPath = path
+            }
         }
-        engine.loadModel(path)
-        loadedPath = path
     }
 }

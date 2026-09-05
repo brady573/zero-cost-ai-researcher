@@ -31,6 +31,18 @@ data class M1AcceptanceCheck(
     val passes: Boolean,
 )
 
+data class StructuredFailure(
+    val attemptIndex: Int,
+    val workloadIndex: Int,
+    val workload: String,
+    val maxTokens: Int,
+    val rawOutputLength: Int,
+    val rawOutputSample: String,
+    val failureStage: String,
+    val exceptionClass: String?,
+    val exceptionMessage: String?,
+)
+
 data class M1ValidationResult(
     val id: String,
     val startedAtEpochMs: Long,
@@ -41,6 +53,7 @@ data class M1ValidationResult(
     val structuredAttempts: Int,
     val structuredSuccesses: Int,
     val structuredSuccessRate: Double,
+    val structuredFailures: List<StructuredFailure>,
     val modelTelemetry: ModelTelemetrySnapshot,
     val nativeBenchmark: ModelBenchmark?,
     val deviceTelemetry: DeviceTelemetrySummary,
@@ -75,20 +88,23 @@ class M1ValidationRunner(
         var successes = 0
         var completedNormally = false
         var cancellation: CancellationException? = null
+        val structuredFailures = mutableListOf<StructuredFailure>()
 
         var samples: List<DeviceTelemetrySample> = emptyList()
         var nativeBenchmark: ModelBenchmark? = null
         try {
             while (System.currentTimeMillis() < deadline) {
                 currentCoroutineContext().ensureActive()
-                val workload = WORKLOADS[attempts % WORKLOADS.size]
+                val attemptIndex = attempts
+                val workloadIndex = attemptIndex % WORKLOADS.size
+                val workload = WORKLOADS[workloadIndex]
                 attempts++
 
                 val raw = try {
                     model.generateText(
                         systemPrompt = STRUCTURED_SYSTEM,
                         prompt = workload,
-                        maxTokens = 220,
+                        maxTokens = STRUCTURED_MAX_TOKENS,
                     )
                 } catch (cancelled: CancellationException) {
                     throw cancelled
@@ -98,12 +114,59 @@ class M1ValidationRunner(
                     throw runtimeFailure("M1 inference", error)
                 }
 
-                val succeeded = try {
-                    validateWorkloadResult(
-                        JSONObject(JsonExtractor.objectText(raw))
+                var succeeded = false
+                val objectText = try {
+                    JsonExtractor.objectText(raw)
+                } catch (error: Exception) {
+                    structuredFailures += structuredFailure(
+                        attemptIndex = attemptIndex,
+                        workloadIndex = workloadIndex,
+                        workload = workload,
+                        raw = raw,
+                        failureStage = "extraction",
+                        error = error,
                     )
-                } catch (_: Exception) {
-                    false
+                    null
+                }
+
+                if (objectText != null) {
+                    val json = try {
+                        JSONObject(objectText)
+                    } catch (error: Exception) {
+                        structuredFailures += structuredFailure(
+                            attemptIndex = attemptIndex,
+                            workloadIndex = workloadIndex,
+                            workload = workload,
+                            raw = raw,
+                            failureStage = "json_parse",
+                            error = error,
+                        )
+                        null
+                    }
+
+                    if (json != null) {
+                        try {
+                            succeeded = validateWorkloadResult(json)
+                            if (!succeeded) {
+                                structuredFailures += structuredFailure(
+                                    attemptIndex = attemptIndex,
+                                    workloadIndex = workloadIndex,
+                                    workload = workload,
+                                    raw = raw,
+                                    failureStage = "validation",
+                                )
+                            }
+                        } catch (error: Exception) {
+                            structuredFailures += structuredFailure(
+                                attemptIndex = attemptIndex,
+                                workloadIndex = workloadIndex,
+                                workload = workload,
+                                raw = raw,
+                                failureStage = "validation",
+                                error = error,
+                            )
+                        }
+                    }
                 }
 
                 if (succeeded) successes++
@@ -148,6 +211,7 @@ class M1ValidationRunner(
             completedNormally = completedNormally,
             attempts = attempts,
             successes = successes,
+            structuredFailures = structuredFailures,
             modelSnapshot = modelTelemetry.snapshot(),
             nativeBenchmark = nativeBenchmark,
             deviceSummary = deviceTelemetry.summarize(samples),
@@ -175,6 +239,25 @@ class M1ValidationRunner(
         )
     }
 
+    private fun structuredFailure(
+        attemptIndex: Int,
+        workloadIndex: Int,
+        workload: String,
+        raw: String,
+        failureStage: String,
+        error: Exception? = null,
+    ): StructuredFailure = StructuredFailure(
+        attemptIndex = attemptIndex,
+        workloadIndex = workloadIndex,
+        workload = workload,
+        maxTokens = STRUCTURED_MAX_TOKENS,
+        rawOutputLength = raw.length,
+        rawOutputSample = sampleRawOutput(raw),
+        failureStage = failureStage,
+        exceptionClass = error?.javaClass?.name,
+        exceptionMessage = error?.message,
+    )
+
     private fun buildResult(
         id: String,
         startedAt: Long,
@@ -183,6 +266,7 @@ class M1ValidationRunner(
         completedNormally: Boolean,
         attempts: Int,
         successes: Int,
+        structuredFailures: List<StructuredFailure>,
         modelSnapshot: ModelTelemetrySnapshot,
         nativeBenchmark: ModelBenchmark?,
         deviceSummary: DeviceTelemetrySummary,
@@ -247,6 +331,7 @@ class M1ValidationRunner(
             structuredAttempts = attempts,
             structuredSuccesses = successes,
             structuredSuccessRate = successRate,
+            structuredFailures = structuredFailures,
             modelTelemetry = modelSnapshot,
             nativeBenchmark = nativeBenchmark,
             deviceTelemetry = deviceSummary,
@@ -267,6 +352,27 @@ class M1ValidationRunner(
             put("structuredAttempts", result.structuredAttempts)
             put("structuredSuccesses", result.structuredSuccesses)
             put("structuredSuccessRate", result.structuredSuccessRate)
+            put("structuredFailures", JSONArray().apply {
+                result.structuredFailures.forEach { failure ->
+                    put(JSONObject().apply {
+                        put("attemptIndex", failure.attemptIndex)
+                        put("workloadIndex", failure.workloadIndex)
+                        put("workload", failure.workload)
+                        put("maxTokens", failure.maxTokens)
+                        put("rawOutputLength", failure.rawOutputLength)
+                        put("rawOutputSample", failure.rawOutputSample)
+                        put("failureStage", failure.failureStage)
+                        put(
+                            "exceptionClass",
+                            failure.exceptionClass ?: JSONObject.NULL,
+                        )
+                        put(
+                            "exceptionMessage",
+                            failure.exceptionMessage ?: JSONObject.NULL,
+                        )
+                    })
+                }
+            })
             put("modelTelemetry", JSONObject().apply {
                 put("calls", result.modelTelemetry.calls)
                 put("streamEmissions", result.modelTelemetry.streamEmissions)
@@ -400,12 +506,26 @@ class M1ValidationRunner(
             tags.length() in 1..4
     }
 
+    private fun sampleRawOutput(raw: String): String {
+        if (raw.length <= RAW_SAMPLE_LIMIT) return raw
+
+        val available = RAW_SAMPLE_LIMIT - RAW_SAMPLE_SEPARATOR.length
+        val prefixLength = available / 2
+        val suffixLength = available - prefixLength
+        return raw.take(prefixLength) +
+            RAW_SAMPLE_SEPARATOR +
+            raw.takeLast(suffixLength)
+    }
+
     private fun percent(value: Double): String =
         "${"%.1f".format(value * 100)}%"
 
     companion object {
         const val ACCEPTANCE_DURATION_MS = 10L * 60 * 1000
         private const val DURATION_TOLERANCE_MS = 2_000
+        private const val STRUCTURED_MAX_TOKENS = 220
+        private const val RAW_SAMPLE_LIMIT = 2_048
+        private const val RAW_SAMPLE_SEPARATOR = "\n...\n"
         private const val STRUCTURED_SYSTEM = """
             You are a deterministic structured-output test.
             Return exactly one JSON object with:
